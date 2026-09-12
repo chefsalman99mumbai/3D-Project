@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jodhpur Cemetery - Procedural 3D</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="loading" style="display: none;">Building Environment...</div>
+    <div id="crosshair"></div>
+    <div id="blocker">
+        <div id="instructions">
+            <h1>Click to Play</h1>
+            <p>Explore the Cemetery (WASD + Mouse)</p>
+            <p style="font-size: 12px; color: #aaa;">Generated fully procedurally based on your map data.</p>
+        </div>
+    </div>
+    <div id="info">
+        <p>WASD to move | Mouse to look | Shift to run | ESC to release mouse</p>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
