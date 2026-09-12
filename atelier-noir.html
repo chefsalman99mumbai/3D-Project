@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<meta name="theme-color" content="#0B0B0C" />
+<meta name="description" content="Atelier Noir — Interiors sculpted in shadow and light. Private residences and boutique hotels designed with disciplined materiality and an obsession with light." />
+<title>Atelier Noir — Interiors Sculpted in Shadow and Light</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        obsidian: "#0B0B0C",
+        ivory: "#EFE7D8",
+        emerald: "#0E3B2E",
+        oxblood: "#5A1B24",
+        taupe: "#B4A48C",
+        brass: "#B68A4E",
+      },
+      fontFamily: {
+        display: ['"Cormorant Garamond"', "serif"],
+        sans: ['Manrope', "system-ui", "sans-serif"],
+      },
+    },
+  },
+};
+</script>
+<style>
+  :root {
+    --obsidian:#0B0B0C; --ivory:#EFE7D8; --emerald:#0E3B2E;
+    --oxblood:#5A1B24; --taupe:#B4A48C; --brass:#B68A4E;
+    --rule:rgba(239,231,216,0.14);
+  }
+  * { box-sizing: border-box; }
+  html, body { background: var(--obsidian); color: var(--ivory); margin:0; }
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
+  body { font-family: Manrope, system-ui, sans-serif; font-weight: 300; overflow-x: hidden; }
+  img, svg, canvas { display:block; max-width:100%; }
+  ::selection { background: var(--brass); color: var(--obsidian); }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background:#08080a; }
+  ::-webkit-scrollbar-thumb { background:#1c1c1f; }
+  :focus-visible { outline: 1px solid var(--brass); outline-offset: 4px; }
+
+  .font-display { font-family: "Cormorant Garamond", serif; }
+
+  .architectural-placeholder {
+    background-color: #0B0B0C;
+    background-image:
+      linear-gradient(rgba(239,231,216,0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(239,231,216,0.055) 1px, transparent 1px),
+      radial-gradient(120% 80% at 20% 10%, rgba(182,138,78,0.12), transparent 60%),
+      radial-gradient(100% 60% at 80% 90%, rgba(14,59,46,0.18), transparent 70%);
+    background-size: 44px 44px, 44px 44px, 100% 100%, 100% 100%;
+  }
+
+  .mask-line { display:block; overflow:hidden; padding-bottom:.09em; margin-bottom:-.09em; }
+  .mask-line > [data-hero-inner] { display:block; transform: translateY(115%); }
+  [data-hero-sub], [data-hero-cta], [data-hero-indicator], [data-hero-meta] { opacity: 0; }
+
+  .magnetic-btn {
+    position: relative; display: inline-flex; align-items:center; justify-content:center;
+    padding: 1.05rem 1.75rem; border: 1px solid rgba(239,231,216,0.24);
+    background: transparent; color: var(--ivory);
+    font-family: Manrope, sans-serif; font-size: 10px; font-weight: 400;
+    letter-spacing: 0.44em; text-transform: uppercase; line-height: 1;
+    overflow: hidden; cursor: pointer; text-decoration: none;
+    transition: color .6s ease, border-color .6s ease; will-change: transform;
+    text-align: center;
+  }
+  .magnetic-btn::before {
+    content:""; position:absolute; inset:0; background: var(--brass);
+    transform: translateY(101%); transition: transform .75s cubic-bezier(.22,.61,.36,1); z-index:0;
+  }
+  .magnetic-btn:hover::before, .magnetic-btn:focus-visible::before { transform: translateY(0); }
+  .magnetic-btn:hover, .magnetic-btn:focus-visible { color: var(--obsidian); border-color: var(--brass); }
+  .magnetic-btn > span { position: relative; z-index:1; display:inline-flex; align-items:center; gap:.75rem; }
+
+  .custom-cursor {
+    position: fixed; top:0; left:0; width:7px; height:7px; border-radius:9999px;
+    background: var(--brass); pointer-events:none; z-index:9999; opacity:0;
+    transform: translate3d(-100px,-100px,0); mix-blend-mode: difference;
+    transition: width .35s ease, height .35s ease, background-color .35s ease, opacity .4s ease;
+    will-change: transform;
+  }
+  .custom-cursor.is-hover { width:30px; height:30px; background: rgba(182,138,78,0.65); }
+
+  @media (hover:hover) and (pointer:fine) {
+    .cursor-none-desktop, .cursor-none-desktop * { cursor: none !important; }
+  }
+
+  .mm-overlay { visibility: hidden; opacity: 0; pointer-events: none; transition: opacity .5s ease, visibility .5s ease; }
+  .mm-overlay.is-open { visibility: visible; opacity: 1; pointer-events: auto; }
+  .mm-panel { transform-origin: top center; transform: scaleY(0); transition: transform .6s cubic-bezier(.22,.61,.36,1); }
+  .mm-overlay.is-open .mm-panel { transform: scaleY(1); }
+
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  .hero-canvas-wrap { position: absolute; inset: 0; z-index: 0; }
+  @media (min-width: 768px) {
+    .hero-canvas-wrap { left: 38%; }
+  }
+
+  /* Reveal helpers */
+  [data-reveal] { opacity: 0; transform: translateY(28px); transition: opacity .9s cubic-bezier(.22,.61,.36,1), transform .9s cubic-bezier(.22,.61,.36,1); }
+  [data-reveal].is-inview { opacity: 1; transform: translateY(0); }
+  [data-reveal-label] { opacity: 0; transform: translateY(12px); transition: opacity .7s ease, transform .7s ease; }
+  [data-reveal-label].is-inview { opacity: 1; transform: translateY(0); }
+
+  .header-scrolled { background: rgba(11,11,12,0.92) !important; backdrop-filter: blur(12px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+    .mask-line > [data-hero-inner] { transform: none !important; }
+    [data-hero-sub],[data-hero-cta],[data-hero-indicator],[data-hero-meta] { opacity: 1 !important; }
+    .custom-cursor { display:none !important; }
+    [data-reveal], [data-reveal-label] { opacity: 1 !important; transform: none !important; }
+  }
+</style>
+</head>
+<body class="cursor-none-desktop bg-obsidian text-ivory">
+
+<!-- Custom cursor -->
+<div id="cursor" class="custom-cursor" aria-hidden="true"></div>
+
+<!-- Skip link -->
+<a href="#work" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[999] focus:bg-obsidian focus:px-4 focus:py-2 focus:text-xs focus:tracking-widest focus:text-ivory">Skip to work</a>
+
+<!-- HEADER -->
+<header id="site-header" class="fixed inset-x-0 top-0 z-[70] transition-colors duration-700 bg-transparent">
+  <div class="mx-auto flex max-w-[1600px] items-center justify-between px-6 py-5 sm:px-8 md:py-7 lg:px-12">
+    <a href="#home" data-scroll="#home" class="font-sans text-[11px] uppercase tracking-[0.5em] text-ivory hover:opacity-70 transition-opacity duration-500">Atelier Noir</a>
+    <nav aria-label="Primary" class="hidden md:flex items-center gap-10">
+      <a href="#work" data-scroll="#work" class="group relative text-[10px] uppercase tracking-[0.45em] text-ivory/75 hover:text-ivory transition-colors duration-500">WORK<span class="absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" aria-hidden="true"></span></a>
+      <a href="#studio" data-scroll="#studio" class="group relative text-[10px] uppercase tracking-[0.45em] text-ivory/75 hover:text-ivory transition-colors duration-500">STUDIO<span class="absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" aria-hidden="true"></span></a>
+      <a href="#services" data-scroll="#services" class="group relative text-[10px] uppercase tracking-[0.45em] text-ivory/75 hover:text-ivory transition-colors duration-500">SERVICES<span class="absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" aria-hidden="true"></span></a>
+      <a href="#contact" data-scroll="#contact" class="group relative text-[10px] uppercase tracking-[0.45em] text-ivory/75 hover:text-ivory transition-colors duration-500">CONTACT<span class="absolute -bottom-1.5 left-0 h-px w-0 bg-brass transition-all duration-500 group-hover:w-full" aria-hidden="true"></span></a>
+    </nav>
+    <button id="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu"
+      class="relative z-[80] md:hidden text-[10px] uppercase tracking-[0.45em] text-ivory hover:text-brass transition-colors duration-500">MENU</button>
+  </div>
+  <div aria-hidden="true" class="h-px w-full bg-ivory/10"></div>
+</header>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Site navigation" class="mm-overlay fixed inset-0 z-[60] md:hidden">
+  <div class="mm-panel absolute inset-0 bg-obsidian"></div>
+  <div class="architectural-placeholder absolute inset-0 opacity-[0.35]" aria-hidden="true"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-obsidian/60 via-transparent to-obsidian/80" aria-hidden="true"></div>
+  <nav aria-label="Mobile" class="relative z-10 flex h-full flex-col justify-center px-7 pb-16 pt-28 sm:px-10">
+    <ul class="flex flex-col gap-2">
+      <li class="overflow-hidden"><a href="#work" data-mm-link data-scroll="#work" class="block font-display text-[16vw] leading-[1.02] tracking-[-0.02em] text-ivory hover:text-brass transition-colors duration-500 sm:text-[11vw]">WORK</a></li>
+      <li class="overflow-hidden"><a href="#studio" data-mm-link data-scroll="#studio" class="block font-display text-[16vw] leading-[1.02] tracking-[-0.02em] text-ivory hover:text-brass transition-colors duration-500 sm:text-[11vw]">STUDIO</a></li>
+      <li class="overflow-hidden"><a href="#services" data-mm-link data-scroll="#services" class="block font-display text-[16vw] leading-[1.02] tracking-[-0.02em] text-ivory hover:text-brass transition-colors duration-500 sm:text-[11vw]">SERVICES</a></li>
+      <li class="overflow-hidden"><a href="#contact" data-mm-link data-scroll="#contact" class="block font-display text-[16vw] leading-[1.02] tracking-[-0.02em] text-ivory hover:text-brass transition-colors duration-500 sm:text-[11vw]">CONTACT</a></li>
+    </ul>
+    <div class="mt-16 flex flex-col gap-4 border-t border-ivory/10 pt-8 text-[10px] uppercase tracking-[0.42em] text-taupe">
+      <span>Mumbai · Delhi · Dubai</span>
+      <a href="mailto:studio@ateliernoir.com" class="inline-block text-ivory/75 underline decoration-brass/40 underline-offset-4 hover:text-brass">studio@ateliernoir.com</a>
+    </div>
+  </nav>
+</div>
+
+<main id="main">
+
+  <!-- HERO -->
+  <section id="home" class="relative min-h-[100svh] w-full overflow-hidden" aria-labelledby="hero-title">
+    <div id="canvas-wrap" class="hero-canvas-wrap architectural-placeholder" aria-hidden="true"></div>
+    <div class="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/80 to-transparent z-[1] pointer-events-none" aria-hidden="true"></div>
+
+    <div class="relative z-10 mx-auto flex min-h-[100svh] max-w-[1600px] flex-col justify-between px-6 pb-10 pt-32 sm:px-8 md:px-12 md:pb-14 md:pt-40">
+      <div class="grid grid-cols-1 gap-10 md:grid-cols-12 md:items-end">
+        <div class="md:col-span-7 lg:col-span-6">
+          <p data-hero-meta class="mb-8 text-[10px] uppercase tracking-[0.5em] text-taupe">Mumbai · Delhi · Dubai</p>
+          <h1 id="hero-title" class="font-display leading-[0.92] tracking-[-0.02em] text-ivory" style="font-size:clamp(2.6rem,9.5vw,5rem)">
+            <span class="mask-line"><span data-hero-inner>Interiors Sculpted</span></span>
+            <span class="mask-line"><span data-hero-inner>in Shadow</span></span>
+            <span class="mask-line"><span data-hero-inner class="italic text-brass">and Light.</span></span>
+          </h1>
+          <p data-hero-sub class="mt-10 max-w-xl text-sm leading-relaxed text-ivory/65 md:text-base">
+            Atelier Noir designs private residences and boutique hotels for those who understand that true luxury is edited, not accumulated — from first sketch to the final fall of light.
+          </p>
+          <div data-hero-cta class="mt-12">
+            <a href="#contact" data-scroll="#contact" class="magnetic-btn" aria-label="Begin a private consultation with Atelier Noir"><span>Begin a Private Consultation</span></a>
+          </div>
+        </div>
+      </div>
+      <div data-hero-indicator class="mt-16 flex items-center gap-4 text-[10px] uppercase tracking-[0.5em] text-ivory/50">
+        <span aria-hidden="true" class="inline-block h-10 w-px bg-brass/60"></span>
+        <span>Scroll</span>
+      </div>
+    </div>
+
+    <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-40 bg-gradient-to-t from-obsidian via-obsidian/70 to-transparent"></div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="work" class="relative px-6 py-24 sm:px-8 md:py-40 lg:px-12" aria-labelledby="work-title">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="mb-12 md:mb-20 flex items-center gap-5" data-reveal-label>
+        <span class="tabular text-[10px] uppercase tracking-[0.42em] text-brass/80">01</span>
+        <span class="text-[10px] uppercase tracking-[0.42em] text-taupe">Selected Work</span>
+        <span class="h-px flex-1 bg-ivory/15" aria-hidden="true"></span>
+      </div>
+      <h2 id="work-title" class="font-display leading-[0.94] tracking-[-0.02em] text-ivory" data-reveal style="font-size:clamp(3rem,10vw,6rem)">
+        Selected <span class="italic text-taupe">Work</span>
+      </h2>
+      <p class="mt-8 max-w-xl text-sm leading-relaxed text-ivory/55 md:mt-10 md:text-[15px]" data-reveal>
+        Three commissions, held in the same discipline — a small number of materials, a strict edit, and an obsession with how light lands on surfaces across a day.
+      </p>
+
+      <div class="mt-24 md:mt-36 flex flex-col gap-28 md:gap-48">
+
+        <!-- Project 01 -->
+        <article data-project class="group relative grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10" data-reveal>
+          <div class="relative md:col-span-7 md:col-start-1">
+            <div class="relative aspect-[4/5] overflow-hidden bg-obsidian sm:aspect-[16/11] md:aspect-[4/5]">
+              <div class="architectural-placeholder absolute inset-0" aria-hidden="true"></div>
+              <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <span class="font-display leading-none text-ivory/[0.05]" style="font-size:clamp(8rem,22vw,16rem)">01</span>
+                <span class="absolute inset-x-[12%] top-[22%] h-px bg-brass/30"></span>
+                <span class="absolute bottom-[18%] left-[12%] right-[30%] h-px bg-ivory/10"></span>
+                <span class="absolute inset-y-[14%] left-[12%] w-px bg-brass/20"></span>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-obsidian/70 to-transparent" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div data-project-content class="flex flex-col md:col-span-4 md:col-start-9 md:row-start-1 md:pt-8">
+            <div class="flex items-baseline gap-5">
+              <span class="tabular font-display text-3xl leading-none text-brass/85 md:text-4xl">01</span>
+              <span data-project-rule class="block h-px flex-1 origin-left bg-ivory/20" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-8 font-display text-[2.2rem] leading-[1.02] tracking-[-0.015em] text-ivory md:text-5xl lg:text-[3.2rem]">The Alibaug House</h3>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.42em] text-taupe">Private Residence · Alibaug, Maharashtra</p>
+            <p class="mt-8 max-w-md text-sm leading-relaxed text-ivory/65 md:text-[15px]">A weekend residence on the Konkan coast, built from board-formed concrete, reclaimed teak, and glass that dissolves into the sea. The brief was edited to three materials and one instruction: let the light do the rest.</p>
+            <button type="button" data-scroll="#contact" class="mt-10 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.42em] text-ivory/70 hover:text-brass transition-colors" aria-label="Enquire about The Alibaug House"><span>Enquire</span><span aria-hidden="true" class="inline-block transition-transform duration-500 group-hover:translate-x-1.5">→</span></button>
+          </div>
+        </article>
+
+        <!-- Project 02 -->
+        <article data-project class="group relative grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10" data-reveal>
+          <div class="relative md:col-span-7 md:col-start-6 md:row-start-1">
+            <div class="relative aspect-[4/5] overflow-hidden bg-obsidian sm:aspect-[16/11] md:aspect-[4/5]">
+              <div class="architectural-placeholder absolute inset-0" aria-hidden="true"></div>
+              <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <span class="font-display leading-none text-ivory/[0.05]" style="font-size:clamp(8rem,22vw,16rem)">02</span>
+                <span class="absolute inset-x-[12%] top-[30%] h-px bg-brass/30"></span>
+                <span class="absolute top-[18%] bottom-[22%] left-[24%] w-px bg-brass/20"></span>
+                <span class="absolute bottom-[14%] left-[20%] right-[24%] h-px bg-ivory/10"></span>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-obsidian/70 to-transparent" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div data-project-content class="flex flex-col md:col-span-4 md:col-start-1 md:row-start-1 md:pt-8">
+            <div class="flex items-baseline gap-5">
+              <span class="tabular font-display text-3xl leading-none text-brass/85 md:text-4xl">02</span>
+              <span data-project-rule class="block h-px flex-1 origin-left bg-ivory/20" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-8 font-display text-[2.2rem] leading-[1.02] tracking-[-0.015em] text-ivory md:text-5xl lg:text-[3.2rem]">Malabar Hill Residence</h3>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.42em] text-taupe">Private Penthouse · Mumbai</p>
+            <p class="mt-8 max-w-md text-sm leading-relaxed text-ivory/65 md:text-[15px]">A 6,000 sq. ft. sky residence for a family who wanted their home to feel like the last quiet room in the city. Smoked oak, hand-troweled lime plaster, and a floating brass stair hold the palette in shadow and warmth.</p>
+            <button type="button" data-scroll="#contact" class="mt-10 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.42em] text-ivory/70 hover:text-brass transition-colors" aria-label="Enquire about Malabar Hill Residence"><span>Enquire</span><span aria-hidden="true" class="inline-block transition-transform duration-500 group-hover:translate-x-1.5">→</span></button>
+          </div>
+        </article>
+
+        <!-- Project 03 -->
+        <article data-project class="group relative grid grid-cols-1 gap-10 md:grid-cols-12 md:gap-10" data-reveal>
+          <div class="relative md:col-span-7 md:col-start-1">
+            <div class="relative aspect-[4/5] overflow-hidden bg-obsidian sm:aspect-[16/11] md:aspect-[4/5]">
+              <div class="architectural-placeholder absolute inset-0" aria-hidden="true"></div>
+              <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+                <span class="font-display leading-none text-ivory/[0.05]" style="font-size:clamp(8rem,22vw,16rem)">03</span>
+                <span class="absolute inset-x-[8%] top-[24%] h-px bg-brass/30"></span>
+                <span class="absolute inset-x-[16%] top-[48%] h-px bg-ivory/10"></span>
+                <span class="absolute inset-y-[16%] right-[20%] w-px bg-brass/20"></span>
+              </div>
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-obsidian/70 to-transparent" aria-hidden="true"></div>
+            </div>
+          </div>
+          <div data-project-content class="flex flex-col md:col-span-4 md:col-start-9 md:row-start-1 md:pt-8">
+            <div class="flex items-baseline gap-5">
+              <span class="tabular font-display text-3xl leading-none text-brass/85 md:text-4xl">03</span>
+              <span data-project-rule class="block h-px flex-1 origin-left bg-ivory/20" aria-hidden="true"></span>
+            </div>
+            <h3 class="mt-8 font-display text-[2.2rem] leading-[1.02] tracking-[-0.015em] text-ivory md:text-5xl lg:text-[3.2rem]">The Solace Hotel</h3>
+            <p class="mt-5 text-[10px] uppercase tracking-[0.42em] text-taupe">Boutique Hospitality · Goa, 42 Keys</p>
+            <p class="mt-8 max-w-md text-sm leading-relaxed text-ivory/65 md:text-[15px]">A 42-key hideaway for a developer who refused to build “another beach hotel.” Every key, corridor, and courtyard was choreographed as a single sequence — arrival to breakfast to sea.</p>
+            <button type="button" data-scroll="#contact" class="mt-10 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.42em] text-ivory/70 hover:text-brass transition-colors" aria-label="Enquire about The Solace Hotel"><span>Enquire</span><span aria-hidden="true" class="inline-block transition-transform duration-500 group-hover:translate-x-1.5">→</span></button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDIO -->
+  <section id="studio" class="relative px-6 py-24 sm:px-8 md:py-40 lg:px-12 border-t border-ivory/10" aria-labelledby="studio-title">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="mb-12 md:mb-20 flex items-center gap-5" data-reveal-label>
+        <span class="tabular text-[10px] uppercase tracking-[0.42em] text-brass/80">02</span>
+        <span class="text-[10px] uppercase tracking-[0.42em] text-taupe">The Studio</span>
+        <span class="h-px flex-1 bg-ivory/15" aria-hidden="true"></span>
+      </div>
+      <div class="grid grid-cols-1 gap-16 md:grid-cols-12 md:gap-10">
+        <div class="md:col-span-5">
+          <h2 id="studio-title" class="font-display leading-[0.94] tracking-[-0.02em] text-ivory" data-reveal style="font-size:clamp(2.8rem,8vw,5rem)">
+            A practice of <span class="italic text-taupe">restraint</span>
+          </h2>
+        </div>
+        <div class="md:col-span-6 md:col-start-7 space-y-8" data-reveal>
+          <p class="text-sm leading-relaxed text-ivory/65 md:text-[15px]">
+            Founded in Mumbai and now working across Delhi and Dubai, Atelier Noir is a small studio of architects and designers who believe that luxury is not abundance — it is clarity. We take on a limited number of commissions each year so that every project receives the same intensity of attention, from the first material sample to the last piece of hardware.
+          </p>
+          <p class="text-sm leading-relaxed text-ivory/65 md:text-[15px]">
+            Our work is defined by a disciplined palette, an almost forensic study of light, and a refusal to decorate. Spaces are composed rather than filled. Surfaces are allowed to age. Light is treated as a primary material.
+          </p>
+          <div class="pt-6 grid grid-cols-2 gap-8 text-[10px] uppercase tracking-[0.36em] text-taupe">
+            <div>
+              <span class="block text-brass/80 mb-2">Founded</span>
+              <span class="text-ivory/80">2014</span>
+            </div>
+            <div>
+              <span class="block text-brass/80 mb-2">Locations</span>
+              <span class="text-ivory/80">Mumbai · Delhi · Dubai</span>
+            </div>
+            <div>
+              <span class="block text-brass/80 mb-2">Focus</span>
+              <span class="text-ivory/80">Residences &amp; Hospitality</span>
+            </div>
+            <div>
+              <span class="block text-brass/80 mb-2">Approach</span>
+              <span class="text-ivory/80">Material · Light · Silence</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="relative px-6 py-24 sm:px-8 md:py-40 lg:px-12 border-t border-ivory/10" aria-labelledby="services-title">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="mb-12 md:mb-20 flex items-center gap-5" data-reveal-label>
+        <span class="tabular text-[10px] uppercase tracking-[0.42em] text-brass/80">03</span>
+        <span class="text-[10px] uppercase tracking-[0.42em] text-taupe">Services</span>
+        <span class="h-px flex-1 bg-ivory/15" aria-hidden="true"></span>
+      </div>
+      <h2 id="services-title" class="font-display leading-[0.94] tracking-[-0.02em] text-ivory mb-16 md:mb-24" data-reveal style="font-size:clamp(2.8rem,8vw,5rem)">
+        How we <span class="italic text-taupe">work</span>
+      </h2>
+
+      <div class="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-10">
+        <article class="border-t border-ivory/15 pt-8" data-reveal>
+          <span class="tabular text-[10px] uppercase tracking-[0.4em] text-brass/70">01</span>
+          <h3 class="mt-5 font-display text-2xl md:text-3xl tracking-[-0.01em] text-ivory">Architecture &amp; Interiors</h3>
+          <p class="mt-5 text-sm leading-relaxed text-ivory/60">Full design from concept through construction. Spatial planning, material specification, lighting design, and coordination with engineers and craftspeople.</p>
+        </article>
+        <article class="border-t border-ivory/15 pt-8" data-reveal>
+          <span class="tabular text-[10px] uppercase tracking-[0.4em] text-brass/70">02</span>
+          <h3 class="mt-5 font-display text-2xl md:text-3xl tracking-[-0.01em] text-ivory">Furniture &amp; Objects</h3>
+          <p class="mt-5 text-sm leading-relaxed text-ivory/60">Bespoke pieces designed specifically for each project — tables, seating, storage, and lighting — fabricated by trusted workshops in India and Europe.</p>
+        </article>
+        <article class="border-t border-ivory/15 pt-8" data-reveal>
+          <span class="tabular text-[10px] uppercase tracking-[0.4em] text-brass/70">03</span>
+          <h3 class="mt-5 font-display text-2xl md:text-3xl tracking-[-0.01em] text-ivory">Hospitality Concepts</h3>
+          <p class="mt-5 text-sm leading-relaxed text-ivory/60">Boutique hotels and private clubs conceived as complete experiences: arrival sequence, guest rooms, public spaces, and the quiet details that make a stay memorable.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="relative px-6 py-24 sm:px-8 md:py-40 lg:px-12 border-t border-ivory/10" aria-labelledby="contact-title">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="mb-12 md:mb-20 flex items-center gap-5" data-reveal-label>
+        <span class="tabular text-[10px] uppercase tracking-[0.42em] text-brass/80">04</span>
+        <span class="text-[10px] uppercase tracking-[0.42em] text-taupe">Begin</span>
+        <span class="h-px flex-1 bg-ivory/15" aria-hidden="true"></span>
+      </div>
+      <div class="grid grid-cols-1 gap-16 md:grid-cols-12">
+        <div class="md:col-span-6">
+          <h2 id="contact-title" class="font-display leading-[0.94] tracking-[-0.02em] text-ivory" data-reveal style="font-size:clamp(2.8rem,8vw,5rem)">
+            A private <span class="italic text-taupe">conversation</span>
+          </h2>
+          <p class="mt-8 max-w-md text-sm leading-relaxed text-ivory/60" data-reveal>
+            We accept a limited number of new commissions each year. If you have a residence, hotel, or private project that aligns with our approach, write to us. We respond within five working days.
+          </p>
+        </div>
+        <div class="md:col-span-5 md:col-start-8" data-reveal>
+          <form id="contact-form" class="space-y-8" onsubmit="event.preventDefault(); this.querySelector('[data-form-status]').textContent='Thank you. We will be in touch shortly.'; this.reset();">
+            <div>
+              <label for="name" class="block text-[10px] uppercase tracking-[0.4em] text-taupe mb-3">Name</label>
+              <input id="name" name="name" type="text" required class="w-full bg-transparent border-b border-ivory/20 py-3 text-ivory placeholder:text-ivory/30 focus:outline-none focus:border-brass transition-colors" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="email" class="block text-[10px] uppercase tracking-[0.4em] text-taupe mb-3">Email</label>
+              <input id="email" name="email" type="email" required class="w-full bg-transparent border-b border-ivory/20 py-3 text-ivory placeholder:text-ivory/30 focus:outline-none focus:border-brass transition-colors" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label for="project" class="block text-[10px] uppercase tracking-[0.4em] text-taupe mb-3">Project type</label>
+              <select id="project" name="project" class="w-full bg-obsidian border-b border-ivory/20 py-3 text-ivory focus:outline-none focus:border-brass transition-colors appearance-none">
+                <option value="">Select…</option>
+                <option value="residence">Private Residence</option>
+                <option value="hospitality">Boutique Hospitality</option>
+                <option value="furniture">Furniture / Objects</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="message" class="block text-[10px] uppercase tracking-[0.4em] text-taupe mb-3">Message</label>
+              <textarea id="message" name="message" rows="4" class="w-full bg-transparent border-b border-ivory/20 py-3 text-ivory placeholder:text-ivory/30 focus:outline-none focus:border-brass transition-colors resize-none" placeholder="A few words about the project…"></textarea>
+            </div>
+            <div class="pt-4">
+              <button type="submit" class="magnetic-btn"><span>Send Enquiry</span></button>
+            </div>
+            <p data-form-status class="text-[11px] tracking-wide text-brass/80 min-h-[1.2em]" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+
+      <div class="mt-24 pt-12 border-t border-ivory/10 grid grid-cols-1 sm:grid-cols-3 gap-10 text-[10px] uppercase tracking-[0.36em] text-taupe" data-reveal>
+        <div>
+          <span class="block text-brass/70 mb-3">Email</span>
+          <a href="mailto:studio@ateliernoir.com" class="text-ivory/80 hover:text-brass transition-colors">studio@ateliernoir.com</a>
+        </div>
+        <div>
+          <span class="block text-brass/70 mb-3">Studios</span>
+          <span class="text-ivory/80">Mumbai · Delhi · Dubai</span>
+        </div>
+        <div>
+          <span class="block text-brass/70 mb-3">Instagram</span>
+          <a href="#" class="text-ivory/80 hover:text-brass transition-colors">@ateliernoir</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="border-t border-ivory/10 px-6 py-10 sm:px-8 lg:px-12">
+  <div class="mx-auto max-w-[1500px] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 text-[10px] uppercase tracking-[0.36em] text-taupe">
+    <span>© 2026 Atelier Noir. All rights reserved.</span>
+    <span class="text-ivory/40">Designed with restraint.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // ---------- Custom cursor ----------
+  const cursor = document.getElementById('cursor');
+  const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (isFinePointer && cursor) {
+    let mouseX = -100, mouseY = -100;
+    let currentX = -100, currentY = -100;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      cursor.style.opacity = '1';
+    });
+    document.addEventListener('mouseleave', () => { cursor.style.opacity = '0'; });
+    function animateCursor() {
+      currentX += (mouseX - currentX) * 0.22;
+      currentY += (mouseY - currentY) * 0.22;
+      cursor.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    const hoverTargets = document.querySelectorAll('a, button, [data-scroll], .magnetic-btn, input, select, textarea');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('is-hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('is-hover'));
+    });
+  }
+
+  // ---------- Header scroll state ----------
+  const header = document.getElementById('site-header');
+  function onScroll() {
+    if (window.scrollY > 40) header.classList.add('header-scrolled');
+    else header.classList.remove('header-scrolled');
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // ---------- Mobile menu ----------
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  let menuOpen = false;
+  function toggleMenu(open) {
+    menuOpen = typeof open === 'boolean' ? open : !menuOpen;
+    mobileMenu.classList.toggle('is-open', menuOpen);
+    menuToggle.setAttribute('aria-expanded', String(menuOpen));
+    menuToggle.textContent = menuOpen ? 'CLOSE' : 'MENU';
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  }
+  menuToggle.addEventListener('click', () => toggleMenu());
+  mobileMenu.querySelectorAll('[data-mm-link]').forEach(link => {
+    link.addEventListener('click', () => toggleMenu(false));
+  });
+
+  // ---------- Smooth scroll for data-scroll ----------
+  document.querySelectorAll('[data-scroll]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      const target = document.querySelector(el.getAttribute('data-scroll'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (menuOpen) toggleMenu(false);
+      }
+    });
+  });
+
+  // ---------- Hero entrance animation ----------
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    const inners = document.querySelectorAll('[data-hero-inner]');
+    inners.forEach((el, i) => {
+      el.style.transition = `transform 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) ${0.15 + i * 0.12}s`;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { el.style.transform = 'translateY(0)'; });
+      });
+    });
+    const fadeEls = [
+      document.querySelector('[data-hero-meta]'),
+      document.querySelector('[data-hero-sub]'),
+      document.querySelector('[data-hero-cta]'),
+      document.querySelector('[data-hero-indicator]')
+    ];
+    fadeEls.forEach((el, i) => {
+      if (!el) return;
+      el.style.transition = `opacity 0.9s ease ${0.7 + i * 0.15}s`;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => { el.style.opacity = '1'; });
+      });
+    });
+  } else {
+    document.querySelectorAll('[data-hero-inner], [data-hero-meta], [data-hero-sub], [data-hero-cta], [data-hero-indicator]').forEach(el => {
+      el.style.transform = 'none';
+      el.style.opacity = '1';
+    });
+  }
+
+  // ---------- Intersection Observer for reveals ----------
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-inview');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-reveal], [data-reveal-label]').forEach(el => {
+    revealObserver.observe(el);
+  });
+
+})();
+</script>
+</body>
+</html>
